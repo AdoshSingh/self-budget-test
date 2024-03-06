@@ -1,31 +1,52 @@
+import axios from "axios";
 import { getAllTransactions, getAllAccounts } from "./api";
-import { Transaction } from "../domain/transaction";
-import { Account } from "../domain/account";
+
+jest.mock("axios");
 
 describe("getAllTransactions", () => {
   it("should return an array of transactions", async () => {
+    const mockResponse = {
+      data: [
+        {
+          id: 1,
+          date: "2022-01-01",
+          accountname: "Account 1",
+          payee: "Payee 1",
+          category: "Category 1",
+          payment: 1000,
+        },
+        {
+          id: 2,
+          date: "2022-01-02",
+          accountname: "Account 2",
+          payee: "Payee 2",
+          category: "Category 2",
+          payment: 2000,
+        },
+      ],
+    };
+
+    (axios.get as jest.Mock).mockResolvedValue(mockResponse);
+
     const result = await getAllTransactions();
 
-    // Assuming result is directly an array of Transaction based on the provided API function signature
-    expect(result.data.length).toBeGreaterThan(0);
-    const firstTransaction: Transaction = result.data[0];
-    expect(firstTransaction).toHaveProperty("id");
-    expect(firstTransaction).toHaveProperty("date");
-    expect(firstTransaction).toHaveProperty("accountname");
-    // If date is a Date object, you might also want to confirm its type
-    expect(firstTransaction.date).toBeInstanceOf(Date);
+    expect(result).toEqual(mockResponse.data);
   });
 });
 
 describe("getAllAccounts", () => {
   it("should return an array of accounts", async () => {
+    const mockResponse = {
+      data: [
+        { id: 1, name: "Account 1", amount: 1000 },
+        { id: 2, name: "Account 2", amount: 2000 },
+      ],
+    };
+
+    (axios.get as jest.Mock).mockResolvedValue(mockResponse);
+
     const result = await getAllAccounts();
 
-    // Assuming result is directly an array of Account based on the provided API function signature
-    expect(result.data.length).toBeGreaterThan(0);
-    const firstAccount: Account = result.data[0];
-    expect(firstAccount).toHaveProperty("id");
-    expect(firstAccount).toHaveProperty("name");
-    expect(firstAccount).toHaveProperty("balance");
+    expect(result).toEqual(mockResponse.data);
   });
 });
