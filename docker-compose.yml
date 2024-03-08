@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   flask-backend:
@@ -10,11 +10,11 @@ services:
       - DB_PASSWORD=password
       - DB_DATABASE=budget
       - DB_USER=root
-    # healthcheck:
-    #   test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 10
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
     depends_on:
       db:
         condition: service_healthy
@@ -25,25 +25,25 @@ services:
       - "4173:4173"
     depends_on:
       - flask-backend
-        
+
   db:
     image: mysql
     environment:
-      MYSQL_USER: 'user'
-      MYSQL_PASSWORD: 'password'
-      MYSQL_ROOT_PASSWORD: 'password'
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "password"
+      MYSQL_ROOT_PASSWORD: "password"
       MYSQL_DATABASE: budget
     ports:
       - "3307:3306"
-    volumes:  
+    volumes:
       - db-data:/var/lib/mysql
       - ./backend/init-db:/docker-entrypoint-initdb.d
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 10
       start_period: 10s
 
 volumes:
-  db-data:     
+  db-data:
