@@ -34,4 +34,3 @@ onMounted(async () => {
     </div>
   </div>
 </template>
-./components/NavBar.vue./components/TopBar.vue
